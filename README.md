@@ -46,6 +46,9 @@ Here is the graph building :
         
 Here the graph is created and to look for the path you can just get :
       private List<NodeAStar> path = AStarAlgorithm.findPath(graph, 10000);
+ 
+When calling this method, your graph must contain ONE start node and ONE goal node (Nodes that have start and goal as their name, no matter the case). Otherwise the algorithms won't work.
+
 Wich gives you the shortest path : Start - b - Goal.
   
  This program also includes a random graph generator which you can call using :
