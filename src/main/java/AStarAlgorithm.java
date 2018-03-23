@@ -5,8 +5,32 @@ import java.util.List;
 public class AStarAlgorithm
 {
 
-    public static List<NodeAStar> findPath(List<NodeAStar> graph, NodeAStar start, NodeAStar goal, int timeoutMs) throws Exception
+
+    //Important Notice :
+    //The graph must contain ONE start node and ONE goal node. (Nodes that have start and goal as their name, no matter the case)
+    //Otherwise the algorithms won't work.
+    public static List<NodeAStar> findPath(List<NodeAStar> graph, int timeoutMs) throws Exception
     {
+        NodeAStar start=null;
+        NodeAStar goal=null;
+
+        for (NodeAStar node : graph)
+        {
+            if (node.getName().toLowerCase().equals("start")) //making sure there is no case mistake
+            {
+                if (start == null)
+                    start = node;
+                else
+                    throw new IllegalArgumentException("The graph contains two nodes called start. Please restart your graph.");
+            }
+            else if (node.getName().toLowerCase().equals("goal"))
+            {
+                if (goal == null)
+                    goal = node;
+                else
+                    throw new IllegalArgumentException("The graph contains two node called goal. Please restart your graph.");
+            }
+        }
 
         // check node not null
         if(start == null || goal == null)

@@ -1,37 +1,23 @@
-import org.hamcrest.CoreMatchers;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class PathFinderTest
+public class RandomGraphCreator
 {
 
-    //Create nodes
-    private NodeAStar start;
-    private NodeAStar goal;
-    private NodeAStar a;
-    private NodeAStar b;
-    private NodeAStar c;
-    private NodeAStar d;
 
-    private List<NodeAStar> path;
+    public RandomGraphCreator()
+    {
+    }
 
-    //creates graph with numNode randomly generated nodes
-    //it includes the node start (always in [0,0])
-    // and the node goal (always in [numNode,numNode])
-    // there always is path between the start node and the goal
-    public List<NodeAStar> GraphCreator(int numNode) throws Exception
+    public List<NodeAStar> create(int numNode) throws Exception
     {
         //Randomly generate numNode nodes
         List<NodeAStar> nodes = new ArrayList<>();
 
         //Add Start node (index 0)
-        start = new NodeAStar("Start", 0,0);
+        NodeAStar start = new NodeAStar("Start", 0,0);
         nodes.add(start);
 
         //index will also serve as name for the nodes
@@ -68,7 +54,7 @@ public class PathFinderTest
 
 
         //add goal at the end of the list (index numNode-1)
-        goal = new NodeAStar("Goal", numNode,numNode);
+        NodeAStar goal = new NodeAStar("Goal", numNode,numNode);
         nodes.add(goal);
 
 
@@ -88,8 +74,9 @@ public class PathFinderTest
         }
 
 
+
         //print the assured path
-        path = AStarAlgorithm.findPath(nodes,start,goal, 1000);
+        List<NodeAStar> path = AStarAlgorithm.findPath(nodes, 1000);
 
         System.out.println("Assured Path :");
         System.out.println(path);
@@ -183,118 +170,4 @@ public class PathFinderTest
 
         return nodes;
     }
-
-    @Test
-    public void randomGraph() throws Exception
-    {
-        List<NodeAStar> graph = GraphCreator(100);
-        try
-        {
-            path = AStarAlgorithm.findPath(graph,start,goal, 10000);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-        System.out.println(path);
-
-    }
-
-    @Before
-    //graph for AStar1, very simple graph
-    public void initGraph1() throws Exception
-    {
-        start = new NodeAStar("Start", 0,0);
-        goal = new NodeAStar("Goal", 2,2);
-        a = new NodeAStar("A", 0,3);
-        b = new NodeAStar("B", 2,0);
-
-        //Link the nodes
-        start.addNeighbor(a);
-        a.addNeighbor(goal);
-
-        start.addNeighbor(b);
-        b.addNeighbor(goal);
-
-        //Create the graph
-        List<NodeAStar> graph = new ArrayList<>();
-        graph.add(start);
-        graph.add(a);
-        graph.add(b);
-        graph.add(goal);
-
-
-        try
-        {
-            path = AStarAlgorithm.findPath(graph,start,goal, 10000);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-
-    }
-
-    @Test
-    public void aStar1() throws Exception
-    {
-        initGraph1();
-        List<NodeAStar> expectedPath = new ArrayList<>();
-        expectedPath.add(start);
-        expectedPath.add(b);
-        expectedPath.add(goal);
-        Assert.assertThat(path, CoreMatchers.is(expectedPath));
-    }
-
-
-    @Before
-    //graph for AStar2, should not work (no path to goal)
-    public void initGraph2() throws Exception
-    {
-        start = new NodeAStar("Start", 0,0);
-        goal = new NodeAStar("Goal", 0,1);
-        a = new NodeAStar("A", 1,0);
-        b = new NodeAStar("B", 2,0);
-        c = new NodeAStar("D", 2,1);
-        d = new NodeAStar("B", 1,1);
-
-        //Link the nodes
-        start.addNeighbor(a);
-        a.addNeighbor(b);
-        b.addNeighbor(c);
-        c.addNeighbor(d);
-        d.addNeighbor(a);
-
-        //Create the graph
-        List<NodeAStar> graph = new ArrayList<>();
-        graph.add(start);
-        graph.add(a);
-        graph.add(b);
-        graph.add(c);
-        graph.add(d);
-        graph.add(goal);
-
-        try
-        {
-            path = AStarAlgorithm.findPath(graph,start,goal, 10000);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-
-
-    }
-
-    @Test
-    public void aStar2() throws Exception
-    {
-        initGraph2();
-        List<NodeAStar> expectedPath = new ArrayList<>();
-
-        Assert.assertThat(path, CoreMatchers.is(expectedPath));
-    }
-
 }
